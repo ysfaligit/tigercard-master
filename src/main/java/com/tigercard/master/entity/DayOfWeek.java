@@ -3,6 +3,8 @@ package com.tigercard.master.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
@@ -22,9 +24,11 @@ public class DayOfWeek {
     private long dayId;
 
     private String day;
+    @ManyToMany(mappedBy = "days", fetch = FetchType.LAZY)
+//    @Fetch(value= FetchMode.SELECT)
+    private Set<RideRule> rideRules = new HashSet<>();
 
-
-    public DayOfWeek(int dayId) {
+    public DayOfWeek(long dayId) {
         this.dayId = dayId;
     }
 }

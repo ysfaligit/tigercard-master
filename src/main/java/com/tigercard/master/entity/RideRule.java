@@ -23,14 +23,12 @@ public class RideRule {
     private Long ruleId;
 
     // time in format "hh:mm:ss"
-    @Temporal(TemporalType.TIME)
     @Column(name = "from_time", nullable = false)
-    private Date fromTime;
+    private Time fromTime;
 
     // time in format "hh:mm:ss"
-    @Temporal(TemporalType.TIME)
     @Column(name = "to_time", nullable = false)
-    private Date toTime;
+    private Time toTime;
 
     @Column(name = "flag_peak")
     private Boolean peak;
@@ -56,5 +54,9 @@ public class RideRule {
 
     public RideRule(long id) {
         this.ruleId = id;
+    }
+
+    public RideRule(boolean isPeak) {
+        this.peak = isPeak;
     }
 }

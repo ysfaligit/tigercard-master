@@ -5,6 +5,7 @@ import com.tigercard.master.entity.Zone;
 import com.tigercard.master.entity.repository.CappingRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,9 +16,17 @@ public class CappingService {
     @Autowired
     private CappingRepository cappingRepository;
 
+    List<Capping> getAllCappings(){
+        return cappingRepository.findAll();
+    }
 
-    public Capping getCappingByZoneFromAndZoneTo(String zoneFrom, String zoneTo) {
+
+    public Capping getCappingByZoneFromAndZoneTo(Long zoneFrom, Long zoneTo) {
         return cappingRepository.findByZoneFromAndZoneTo(new Zone(zoneFrom), new Zone(zoneTo));
+    }
+
+    public Capping getCappingByZoneFromAndZoneTo(Zone zoneFrom, Zone zoneTo) {
+        return cappingRepository.findByZoneFromAndZoneTo(zoneFrom, zoneTo);
     }
 
     public List<Capping> getCappings() {

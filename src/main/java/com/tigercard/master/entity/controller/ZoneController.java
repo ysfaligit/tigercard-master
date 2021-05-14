@@ -14,7 +14,7 @@ public class ZoneController {
     private ZoneService zoneService;
 
     @GetMapping("/{id}")
-    public Zone getZone(@PathVariable("id") String id){
+    public Zone getZone(@PathVariable("id") Long id){
         return zoneService.getZoneById(id);
     }
 
@@ -29,7 +29,7 @@ public class ZoneController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") String id) {
+    public void delete(@PathVariable("id") Long id) {
         zoneService.delete(id);
     }
 }

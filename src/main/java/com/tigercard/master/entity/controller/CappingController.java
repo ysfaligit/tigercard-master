@@ -16,7 +16,7 @@ public class CappingController {
     private CappingService cappingService;
 
     @GetMapping("/{zoneFrom}/{zoneTo}")
-    public Capping getCappingForZones(@PathVariable("zoneFrom") String zoneFrom, @PathVariable("zoneTo") String zoneTo){
+    public Capping getCappingForZones(@PathVariable("zoneFrom") Long zoneFrom, @PathVariable("zoneTo") Long zoneTo){
         return cappingService.getCappingByZoneFromAndZoneTo(zoneFrom,zoneTo);
     }
 

@@ -1,10 +1,11 @@
 package com.tigercard.master.entity.repository;
 
-import com.tigercard.master.entity.Zone;
+import com.tigercard.master.entity.TigerCard;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ZoneRepository extends JpaRepository<Zone, Long> {
-    Zone getZoneByZoneId(Long id);
+public interface TigerCardRepository extends JpaRepository<TigerCard, Double> {
+
+    void deleteByCardId(double id);
 }

@@ -25,7 +25,7 @@ public class RateController {
     }
 
     @GetMapping("/{zoneFrom}/{zoneTo}")
-    public Rate getRateByZones(@PathVariable("zoneFrom") String zoneFrom, @PathVariable("zoneTo") String zoneTo) {
+    public Rate getRateByZones(@PathVariable("zoneFrom") Long zoneFrom, @PathVariable("zoneTo") Long zoneTo) {
         return rateService.getRateByZones(zoneFrom,zoneTo);
     }
 

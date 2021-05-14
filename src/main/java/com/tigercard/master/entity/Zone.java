@@ -17,11 +17,11 @@ import java.util.Set;
 public class Zone implements Serializable {
     @Id
     @Column(name = "zone_id", unique = true, nullable = false,length = 11,updatable = false)
-    private String zoneId;
+    private Long zoneId;
 
     private String name;
 
-    public Zone(String zone) {
+    public Zone(Long zone) {
         this.zoneId = zone;
     }
 }

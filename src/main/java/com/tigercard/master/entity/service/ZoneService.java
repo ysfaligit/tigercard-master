@@ -14,7 +14,7 @@ public class ZoneService {
     @Autowired
     private ZoneRepository zoneRepository;
 
-    public Zone getZoneById(String id) {
+    public Zone getZoneById(Long id) {
         return zoneRepository.getZoneByZoneId(id);
     }
 
@@ -26,7 +26,7 @@ public class ZoneService {
         return zoneRepository.save(zone);
     }
 
-    public void delete(String id) {
+    public void delete(Long id) {
         zoneRepository.deleteById(id);
     }
 }

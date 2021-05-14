@@ -23,8 +23,12 @@ public class RateService {
         return repository.save(rate);
     }
 
-    public Rate getRateByZones(@NonNull String zoneFrom, @NonNull String zoneTo) {
+    public Rate getRateByZones(@NonNull Long zoneFrom, @NonNull Long zoneTo) {
         return repository.findByIdZoneFromAndIdZoneTo(new Zone(zoneFrom), new Zone(zoneTo));
+    }
+
+    public Rate getRateByZones(@NonNull Zone zoneFrom, @NonNull Zone zoneTo) {
+        return repository.findByIdZoneFromAndIdZoneTo(zoneFrom, zoneTo);
     }
 
     public void delete(long id) {
