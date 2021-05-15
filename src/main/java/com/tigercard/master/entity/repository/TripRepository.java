@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Propagation;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -30,4 +31,5 @@ public interface TripRepository extends JpaRepository<Trip, Long> {
     void updateTripDetails(@Param("tripId") long tripId, @Param("explanation") String explanation,
                            @Param("fare") int fare);
 
+    List<Trip> getTripsByCardAndPunchTimeBetween(TigerCard card, Date fromDate, Date toDate, Sort by);
 }

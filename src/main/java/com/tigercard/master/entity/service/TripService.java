@@ -5,6 +5,7 @@ import com.tigercard.master.entity.repository.TripRepository;
 import com.tigercard.master.entity.repository.WeeklyTripRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -27,9 +28,6 @@ public class TripService {
     private RideRuleService rideRuleService;
 
     @Autowired
-    private FareCalculatorService fareCalculatorService;
-
-    @Autowired
     private RateService rateService;
 
     @Autowired
@@ -39,39 +37,20 @@ public class TripService {
     private WeeklyTripRepository weeklyTripRepository;
 
 
+    @Value("punchTime,time")
+    private String[] sortColumns;
+
+
     public List<Trip> getTripsByCard(TigerCard card) {
-        return tripRepository.getTripsByCard(card, Sort.by("punchTime"));
+        return tripRepository.getTripsByCard(card, Sort.by(sortColumns));
     }
 
     public Trip save(Trip newTrip) {
-        // LOADING RULE TO BE APPLIED
-        LocalDate l = newTrip.getPunchTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        Calendar c = Calendar.getInstance();
-        c.setTime(newTrip.getPunchTime());
-
-        newTrip.setTime(new Time(c.getTimeInMillis()));
-        newTrip.setWeekOfYear(c.get(Calendar.WEEK_OF_YEAR));
-        newTrip.setCard(new TigerCard(newTrip.getCardId()));
-        newTrip.setDay(new DayOfWeek(l.getDayOfWeek().getValue()));
-
-        // LOAD ALL DAILY TRIPS + ADD NEW TRIP
-//        List<Trip> dbTotalDailyTrips = tripRepository.getTripsByCardAndDayAndWeekOfYear(newTrip.getCard(),
-//                newTrip.getDay(), newTrip.getWeekOfYear());
-//        tripRepository.saveAndFlush(newTrip);
-        processDailyTrip(newTrip);
-        return newTrip;
+        return processDailyTrip(newTrip);
     }
 
-    public void processDailyTrip(Trip newTrip) {
-        // LOADING RULE TO BE APPLIED
-        LocalDate l = newTrip.getPunchTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        Calendar c = Calendar.getInstance();
-        c.setTime(newTrip.getPunchTime());
-
-        newTrip.setTime(new Time(c.getTimeInMillis()));
-        newTrip.setWeekOfYear(c.get(Calendar.WEEK_OF_YEAR));
-        newTrip.setCard(new TigerCard(newTrip.getCardId()));
-        newTrip.setDay(new DayOfWeek(l.getDayOfWeek().getValue()));
+    public Trip processDailyTrip(Trip newTrip) {
+        populateDateAttributes(newTrip);
 
         // LOAD DAILY & WEEKLY CAPINGS
         cappingService.getAllCappings().stream().forEach(capping -> {
@@ -114,14 +93,14 @@ public class TripService {
                         .mapToInt(value -> value.getCalculatedDailyFare()).sum();
 
         WeeklyTrip weeklyTripOfCurrentDay = weeklyTrips.stream()
-                .filter(weeklyTrip -> weeklyTrip.getDay().getDayId() == l.getDayOfWeek().getValue())
+                .filter(weeklyTrip -> weeklyTrip.getDay().getDayId() == newTrip.getDay().getDayId())
                 .findFirst().orElse(new WeeklyTrip(maxDailyCappedZoneKey, maxFaredTrip.getOriginalFare(),
                         newTrip.getWeekOfYear(), newTrip.getDay(),
                         newTrip.getCard()));
 
         if (weeklyTripOfCurrentDay.getWeeklyTripId() == null)
             weeklyTrips.add(weeklyTripOfCurrentDay);
-         else {
+        else {
             weeklyTripOfCurrentDay.setMaxCappedFare(maxFaredTrip.getOriginalFare());
             weeklyTripOfCurrentDay.setMaxCappedZone(maxDailyCappedZoneKey);
         }
@@ -142,20 +121,18 @@ public class TripService {
 
             if (flagWeeklyFareMaxReached) {
                 trip.setFare(0);
-                String explanation = "Weekly cap reached of Rs : " + weeklyCapping + ". Charging " + trip.getFare()
-                        + " instead of " + trip.getOriginalFare();
+                String explanation = "Weekly cap reached of Rs : " + weeklyCapping;
+
                 trip.setExplanation(explanation);
                 weeklyTripOfCurrentDay.setExplanation(explanation);
                 continue;
 
             } else if (flagDailyFareMaxReached) {
                 trip.setFare(0);
+                trip.setExplanation("Daily cap reached of Rs : " + dailyCapping);
 
-                trip.setExplanation("Daily cap reached of Rs : " + dailyCapping + ". Charging " + trip.getFare()
-                        + " instead of " + trip.getOriginalFare());
-                weeklyTripOfCurrentDay.setExplanation("Daily Capped Reached");
+                weeklyTripOfCurrentDay.setExplanation("Daily cap reached of Rs : " + dailyCapping);
                 continue;
-
             }
 
             summationOfDailyFareTrips += trip.getOriginalFare();
@@ -166,26 +143,26 @@ public class TripService {
                 trip.setFare(weeklyCapping - (summationWeeklyFareExclCurrentDay + summationOfDailyFareTrips - trip.getOriginalFare()));
                 summationOfDailyFareTrips = summationOfDailyFareTrips - trip.getOriginalFare() + trip.getFare();
 
-                trip.setExplanation("Weekly cap reached of Rs : " + weeklyCapping + ". Charging " + trip.getFare()
+                trip.setExplanation("Weekly cap reached of Rs : " + weeklyCapping + " for Zone " + trip.getZoneFrom().getZoneId()
+                        + "-" + trip.getZoneTo().getZoneId() + ". Charging " + trip.getFare()
                         + " instead of " + trip.getOriginalFare());
+                weeklyTripOfCurrentDay.setExplanation("Weekly cap reached of Rs : " + weeklyCapping + " before daily cap of " + dailyCapping);
+            } else if (summationOfDailyFareTrips >= dailyCapping) {
+                flagDailyFareMaxReached = Boolean.TRUE;
 
-            }
-            if (summationOfDailyFareTrips < dailyCapping) {
-                trip.setFare(trip.getOriginalFare());
-                weeklyTripOfCurrentDay.setExplanation("Daily Cap Not Reached");
-            }
-
-            else if (summationOfDailyFareTrips >= dailyCapping) {
                 trip.setFare(dailyCapping - (summationOfDailyFareTrips - trip.getOriginalFare()));
-
                 summationOfDailyFareTrips = summationOfDailyFareTrips - trip.getOriginalFare() + trip.getFare();
 
                 trip.setExplanation("Daily cap reached of Rs : " + dailyCapping + ". Charging " + trip.getFare()
                         + " instead of " + trip.getOriginalFare());
 
-                flagDailyFareMaxReached = Boolean.TRUE;
 
-                weeklyTripOfCurrentDay.setExplanation("Daily Capped Reached");
+                weeklyTripOfCurrentDay.setExplanation("Daily Cap of " + dailyCapping + " Reached");
+            } else if (summationOfDailyFareTrips < dailyCapping) {
+                trip.setFare(trip.getOriginalFare());
+                if (trip.getDay().getDayId() == 1)
+                    weeklyTripOfCurrentDay.setExplanation("New Week Started");
+                weeklyTripOfCurrentDay.setExplanation("Daily Cap Not Reached");
             }
         }
         weeklyTripOfCurrentDay.setCalculatedDailyFare(summationOfDailyFareTrips);
@@ -198,9 +175,22 @@ public class TripService {
             weeklyTripRepository.save(weeklyTripOfCurrentDay);
         else
             weeklyTripRepository.updateWeeklyTripByDayAndWeekOfYear(weeklyTripOfCurrentDay.getMaxCappedZone(),
-                weeklyTripOfCurrentDay.getMaxCappedFare(), weeklyTripOfCurrentDay.getCalculatedDailyFare(),
-                weeklyTripOfCurrentDay.getWeeklyTripId());
+                    weeklyTripOfCurrentDay.getMaxCappedFare(), weeklyTripOfCurrentDay.getCalculatedDailyFare(),
+                    weeklyTripOfCurrentDay.getWeeklyTripId());
 
+        return newTrip;
+    }
+
+    private void populateDateAttributes(Trip trip) {
+        // LOADING RULE TO BE APPLIED
+        LocalDate l = trip.getPunchTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        Calendar c = Calendar.getInstance();
+        c.setTime(trip.getPunchTime());
+
+        trip.setTime(new Time(c.getTimeInMillis()));
+        trip.setWeekOfYear(c.get(Calendar.WEEK_OF_YEAR));
+        trip.setCard(new TigerCard(trip.getCardId()));
+        trip.setDay(new DayOfWeek(l.getDayOfWeek().getValue()));
     }
 
     boolean isPeak(Trip newTrip) {
@@ -248,5 +238,10 @@ public class TripService {
 
     public List<Trip> getTrips() {
         return tripRepository.findAll();
+    }
+
+
+    public List<Trip> getTripsByCardAndDateRange(long cardId, Date fromDate, Date toDate) {
+        return tripRepository.getTripsByCardAndPunchTimeBetween(new TigerCard(cardId), fromDate, toDate, Sort.by(sortColumns));
     }
 }

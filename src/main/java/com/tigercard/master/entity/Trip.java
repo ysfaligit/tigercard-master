@@ -24,9 +24,9 @@ public class Trip {
     private Long tripId;
 
     @NonNull
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "fk_card", nullable = false, updatable = false)
-    @JsonIgnore
     private TigerCard card;
 
     @NonNull
@@ -34,6 +34,7 @@ public class Trip {
     private Time time;
 
     @NonNull
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "fk_day", nullable = false)
     private DayOfWeek day;
@@ -51,15 +52,14 @@ public class Trip {
     private Zone zoneTo;
 
     private int weekOfYear;
-
     private Integer originalFare;
     private boolean flagPeak;
     private Integer fare;
     private String explanation;
 
+    @Temporal(TemporalType.DATE)
     @Column(name = "created_at", nullable = false)
     private Date punchTime;
-
 
     @Transient
     private long cardId;

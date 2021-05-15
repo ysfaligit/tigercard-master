@@ -24,9 +24,6 @@ public class DayOfWeek {
     private long dayId;
 
     private String day;
-    @ManyToMany(mappedBy = "days", fetch = FetchType.LAZY)
-//    @Fetch(value= FetchMode.SELECT)
-    private Set<RideRule> rideRules = new HashSet<>();
 
     public DayOfWeek(long dayId) {
         this.dayId = dayId;

@@ -14,7 +14,7 @@ import java.util.List;
 public interface RideRulesRepository extends JpaRepository<RideRule, Long> {
 
     @Query(value = "SELECT r FROM RideRule r join r.days d " +
-            "WHERE r.fromTime <= ?1 AND r.toTime > ?2 " +
+            "WHERE r.fromTime <= ?1 AND r.toTime >= ?2 " +
             "and (r.zoneFrom = ?3 OR r.zoneFrom is NULL) and (r.zoneTo =?4 OR r.zoneTo is NULL) "
             + "and d.dayId = ?5")
     List<RideRule> getRideRule(Time time, Time time1, Zone fromZone, Zone toZone, long dayOfWeek);

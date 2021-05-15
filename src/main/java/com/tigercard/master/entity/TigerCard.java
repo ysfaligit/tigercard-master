@@ -24,10 +24,6 @@ public class TigerCard {
 
     private String customer;
 
-    @OneToMany(cascade = CascadeType.MERGE, mappedBy = "card",fetch = FetchType.EAGER)
-//    @Fetch(value= FetchMode.SELECT)
-    private Set<Trip> trips = new HashSet();
-
     @Column(name = "created_at", nullable = false)
     private Date createdAt = new Date();
 

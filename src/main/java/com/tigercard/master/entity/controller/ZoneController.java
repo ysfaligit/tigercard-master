@@ -2,6 +2,7 @@ package com.tigercard.master.entity.controller;
 
 import com.tigercard.master.entity.Zone;
 import com.tigercard.master.entity.service.ZoneService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/zone")
+@Slf4j
 public class ZoneController {
     @Autowired
     private ZoneService zoneService;
