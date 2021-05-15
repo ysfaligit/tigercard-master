@@ -1,5 +1,7 @@
 package com.tigercard.master.entity.service;
 
+import com.tigercard.master.dto.TripRequestDto;
+import com.tigercard.master.dto.TripResponseDto;
 import com.tigercard.master.entity.*;
 import com.tigercard.master.entity.repository.TripRepository;
 import com.tigercard.master.entity.repository.WeeklyTripRepository;
@@ -41,15 +43,28 @@ public class TripService {
     private String[] sortColumns;
 
 
-    public List<Trip> getTripsByCard(TigerCard card) {
-        return tripRepository.getTripsByCard(card, Sort.by(sortColumns));
+    public TripResponseDto getTripsByCard(TigerCard card) {
+        TripResponseDto tripResponseDto = new TripResponseDto();
+
+        tripResponseDto.setTrips(tripRepository.getTripsByCard(card, Sort.by(sortColumns)));
+        tripResponseDto.setTotalTrip(tripResponseDto.getTrips().stream().mapToInt(value -> value.getFare()).sum());
+        return tripResponseDto;
     }
 
-    public Trip save(Trip newTrip) {
-        return processDailyTrip(newTrip);
+    Trip prepareData(TripRequestDto newTrip) {
+        Trip t = new Trip();
+        t.setPunchTime(newTrip.getPunchTime());
+        t.setZoneFrom(new Zone(newTrip.getZoneFrom()));
+        t.setZoneTo(new Zone(newTrip.getZoneTo()));
+        t.setCard(new TigerCard(newTrip.getCardId()));
+        return t;
     }
 
-    public Trip processDailyTrip(Trip newTrip) {
+    public Trip save(TripRequestDto newTrip) {
+        return processDailyTrip(prepareData(newTrip));
+    }
+
+    private Trip processDailyTrip(Trip newTrip) {
         populateDateAttributes(newTrip);
 
         // LOAD DAILY & WEEKLY CAPINGS
@@ -189,7 +204,6 @@ public class TripService {
 
         trip.setTime(new Time(c.getTimeInMillis()));
         trip.setWeekOfYear(c.get(Calendar.WEEK_OF_YEAR));
-        trip.setCard(new TigerCard(trip.getCardId()));
         trip.setDay(new DayOfWeek(l.getDayOfWeek().getValue()));
     }
 
@@ -236,12 +250,28 @@ public class TripService {
         }
     }
 
-    public List<Trip> getTrips() {
-        return tripRepository.findAll();
+    public TripResponseDto getTrips() {
+        TripResponseDto tripResponseDto = new TripResponseDto();
+        tripResponseDto.setTrips(tripRepository.findAll());
+        tripResponseDto.setTotalTrip(tripResponseDto.getTrips().stream().mapToInt(value -> value.getFare()).sum());
+        return tripResponseDto;
     }
 
 
-    public List<Trip> getTripsByCardAndDateRange(long cardId, Date fromDate, Date toDate) {
-        return tripRepository.getTripsByCardAndPunchTimeBetween(new TigerCard(cardId), fromDate, toDate, Sort.by(sortColumns));
+    public TripResponseDto getTripsByCardAndDateRange(TripRequestDto tripRequestDto) {
+        TripResponseDto tripResponseDto = new TripResponseDto();
+
+
+        tripResponseDto.setTrips(tripRepository.getTripsByCardAndPunchTimeBetween
+                (new TigerCard(tripRequestDto.getCardId()), tripRequestDto.getFromDate(), tripRequestDto.getToDate(),
+                        Sort.by(sortColumns)));
+        tripResponseDto.setTotalTrip(tripResponseDto.getTrips().stream().mapToInt(value -> value.getFare()).sum());
+        return tripResponseDto;
+    }
+
+    public void save(List<TripRequestDto> trips) throws Exception {
+        trips.forEach(tripRequestDto -> {
+            save(tripRequestDto);
+        });
     }
 }

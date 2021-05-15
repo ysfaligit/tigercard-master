@@ -21,15 +21,27 @@ public class TripController {
     private TripService tripService;
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
 
-    @PostMapping("/")
-    public Trip save(@RequestBody Trip trip) {
-        return tripService.save(trip);
+    @PostMapping("/save")
+    public ResponseEntity<Trip> save(@RequestBody TripRequestDto trip) {
+         return ResponseEntity.ok(tripService.save(trip));
     }
 
-    @GetMapping("/{card}")
-    public List<Trip> getAllTripsByCard(@PathVariable("card") long cardId) {
-        return tripService.getTripsByCard(new TigerCard(cardId));
+    @PostMapping("/saveAll")
+    public ResponseEntity<String> saveAll(@RequestBody List<TripRequestDto> trips) {
+        try {
+            tripService.save(trips);
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+        return ResponseEntity.ok("Trips saved successfully");
     }
+
+    @GetMapping("/report/{cardId}")
+    public ResponseEntity<TripResponseDto> getAllTripsByCard(@PathVariable("cardId") long cardId) {
+         return ResponseEntity.ok(tripService.getTripsByCard(new TigerCard(cardId)));
+    }
+
 
     @PostMapping("/report")
     public ResponseEntity<TripResponseDto> getTripsByCardAndDateRange(@RequestBody TripRequestDto tripRequestDto) {
@@ -40,13 +52,7 @@ public class TripController {
                 return ResponseEntity.badRequest().body(tripResponseDto);
             }
 
-
-            tripResponseDto.setTrips(tripService.
-                    getTripsByCardAndDateRange(tripRequestDto.getCardId(),
-                            tripRequestDto.getFromDate(), tripRequestDto.getToDate()));
-            tripResponseDto.setTotalTrip(tripResponseDto.getTrips().stream().mapToInt(value -> value.getFare()).sum());
-
-            return ResponseEntity.ok(tripResponseDto);
+            return ResponseEntity.ok(tripService.getTripsByCardAndDateRange(tripRequestDto));
 
 
         } catch (Exception e) {
@@ -56,7 +62,7 @@ public class TripController {
     }
 
     @GetMapping("/report")
-    public List<Trip> getAllTrips() {
-        return tripService.getTrips();
+    public ResponseEntity<TripResponseDto> getAllTrips() {
+        return ResponseEntity.ok(tripService.getTrips());
     }
 }

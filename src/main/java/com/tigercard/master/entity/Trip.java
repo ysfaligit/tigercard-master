@@ -60,7 +60,4 @@ public class Trip {
     @Temporal(TemporalType.DATE)
     @Column(name = "created_at", nullable = false)
     private Date punchTime;
-
-    @Transient
-    private long cardId;
 }

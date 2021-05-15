@@ -16,4 +16,6 @@ public class TripRequestDto {
     private Date fromDate;
     private Date toDate;
     private long cardId;
+    private long zoneFrom;
+    private long zoneTo;
 }
