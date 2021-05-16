@@ -46,6 +46,11 @@ public class RideRule {
     @ManyToMany(cascade = {CascadeType.MERGE})
     private Set<DayOfWeek> days = new HashSet<>();
 
+    private double priority;
+    private boolean active;
+    private Date fromDate;
+    private Date toDate;
+
     @Transient
     private Boolean weekdays;
 

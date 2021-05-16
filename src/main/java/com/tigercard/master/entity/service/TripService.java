@@ -8,6 +8,7 @@ import com.tigercard.master.entity.repository.WeeklyTripRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -19,10 +20,6 @@ import java.util.*;
 @Service
 @Slf4j
 public class TripService {
-    Map<String, Integer> dailyCappings = new HashMap<>();
-    Map<String, Integer> weeklyCappings = new HashMap<>();
-    Map<String, Rate> rates = new HashMap<>();
-
     @Autowired
     private TripRepository tripRepository;
 
@@ -39,7 +36,7 @@ public class TripService {
     private WeeklyTripRepository weeklyTripRepository;
 
 
-    @Value("punchTime,time")
+    @Value("${trip.sort.columns}")
     private String[] sortColumns;
 
 
@@ -67,34 +64,23 @@ public class TripService {
     private Trip processDailyTrip(Trip newTrip) {
         populateDateAttributes(newTrip);
 
-        // LOAD DAILY & WEEKLY CAPINGS
-        cappingService.getAllCappings().stream().forEach(capping -> {
-            String key = capping.getZoneFrom().getZoneId() + "-" + capping.getZoneTo().getZoneId();
-            this.dailyCappings.put(key, capping.getDailyCap());
-            this.weeklyCappings.put(key, capping.getWeeklyCap());
-        });
-
-
-        // LOAD ALL RATES
-        rateService.getRates().stream().forEach(rate -> {
-            String key = rate.getId().getZoneFrom().getZoneId() + "-" + rate.getId().getZoneTo().getZoneId();
-            rates.put(key, rate);
-        });
-
         // LOAD ALL DAILY TRIPS + ADD NEW TRIP
         List<Trip> totalDailyTrips = tripRepository.getTripsByCardAndDayAndWeekOfYear(newTrip.getCard(),
                 newTrip.getDay(), newTrip.getWeekOfYear());
         totalDailyTrips.add(newTrip);
 
         // POPULATE ORIGINAL FARE IN OLD + NEWLY ADDED TRIP
-        populateOriginalFares(totalDailyTrips);
+        populateOriginalFare(newTrip);
 
         // SORT BY ORIGINAL FARE TO CALCULATE MAX_DAILY_FARE_CAPPING
         Collections.sort(totalDailyTrips, (o1, o2) -> o2.getOriginalFare().compareTo(o1.getOriginalFare()));
 
         Trip maxFaredTrip = totalDailyTrips.get(0);
+
+        int dailyCapping = cappingService.getCappingByZoneFromAndZoneTo(maxFaredTrip.getZoneFrom().getZoneId(),
+                maxFaredTrip.getZoneTo().getZoneId()).getDailyCap();
+
         String maxDailyCappedZoneKey = maxFaredTrip.getZoneFrom().getZoneId() + "-" + maxFaredTrip.getZoneTo().getZoneId();
-        int dailyCapping = dailyCappings.get(maxDailyCappedZoneKey);
 
 
         // WEEKLY TRIP PROCESSING
@@ -123,7 +109,11 @@ public class TripService {
         Collections.sort(weeklyTrips, (o1, o2) -> Integer.valueOf(o2.getMaxCappedFare())
                 .compareTo(o1.getMaxCappedFare()));
 
-        int weeklyCapping = weeklyCappings.get(weeklyTrips.get(0).getMaxCappedZone());
+        Capping weeklyCappingObject = cappingService.getCappingByZoneFromAndZoneTo(
+                Long.parseLong(weeklyTrips.get(0).getMaxCappedZone().split("-")[0]),
+                Long.parseLong(weeklyTrips.get(0).getMaxCappedZone().split("-")[1]));
+
+        int weeklyCapping = weeklyCappingObject.getWeeklyCap();
 
         // WEEKLY CAP PROCESSING END...
         int summationOfDailyFareTrips = 0;
@@ -211,43 +201,19 @@ public class TripService {
         return rideRuleService.getRideRuleByTrip(newTrip).getPeak();
     }
 
-    void populateOriginalFares(List<Trip> totalDailyTrips) {
-        totalDailyTrips.stream().forEach(trip -> {
+    void populateOriginalFare(Trip trip) {
             // CREATE ZONE KEY
             String key = trip.getZoneFrom().getZoneId() + "-" + trip.getZoneTo().getZoneId();
+            Rate rate = rateService.getRateByZones(trip.getZoneFrom().getZoneId(), trip.getZoneTo().getZoneId());
             if (isPeak(trip)) {
                 trip.setFlagPeak(Boolean.TRUE);
-                trip.setOriginalFare(rates.get(key).getPeakRate());
+                trip.setOriginalFare(rate.getPeakRate());
                 trip.setExplanation("Peak hours Single fare");
             } else {
                 trip.setFlagPeak(Boolean.FALSE);
-                trip.setOriginalFare(rates.get(key).getOffPeakRate());
+                trip.setOriginalFare(rate.getOffPeakRate());
                 trip.setExplanation("Off-peak single fare");
             }
-        });
-    }
-
-    void applyRates(Trip newTrip) {
-        // CREATE ZONE KEY
-        String key = newTrip.getZoneFrom().getZoneId() + "-" + newTrip.getZoneTo().getZoneId();
-
-        int currentTripRate;
-
-        if (isPeak(newTrip)) {
-            currentTripRate = rates.get(key).getPeakRate();
-            newTrip.setFare(currentTripRate);
-            newTrip.setOriginalFare(currentTripRate);
-            newTrip.setExplanation("peak hours single fare");
-
-            log.info("peak hours single fare");
-        } else {
-            currentTripRate = rates.get(key).getOffPeakRate();
-            newTrip.setFare(currentTripRate);
-            newTrip.setOriginalFare(currentTripRate);
-            newTrip.setExplanation("off peak single fare");
-
-            log.info("off peak single fare");
-        }
     }
 
     public TripResponseDto getTrips() {

@@ -24,11 +24,6 @@ public class RateController {
         return rateService.save(rate);
     }
 
-    @GetMapping("/{zoneFrom}/{zoneTo}")
-    public Rate getRateByZones(@PathVariable("zoneFrom") Long zoneFrom, @PathVariable("zoneTo") Long zoneTo) {
-        return rateService.getRateByZones(zoneFrom,zoneTo);
-    }
-
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") long id) {
         rateService.delete(id);

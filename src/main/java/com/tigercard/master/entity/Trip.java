@@ -56,6 +56,8 @@ public class Trip {
     private boolean flagPeak;
     private Integer fare;
     private String explanation;
+    private Date fromDate;
+    private Date toDate;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "created_at", nullable = false)

@@ -1,0 +1,32 @@
+[
+  {
+    "cardId": "1000",
+    "punchTime": "2021-05-10T10:20:00+05:30",
+    "zoneFrom": 2,
+    "zoneTo": 1
+  },
+  {
+    "cardId": "1000",
+    "punchTime": "2021-05-10T10:45:00+05:30",
+    "zoneFrom": 2,
+    "zoneTo": 1
+  },
+  {
+    "cardId": "1000",
+    "punchTime": "2021-05-10T16:15:00+05:30",
+    "zoneFrom": 1,
+    "zoneTo": 1
+  },
+  {
+    "cardId": "1000",
+    "punchTime": "2021-05-10T18:15:00+05:30",
+    "zoneFrom": 1,
+    "zoneTo": 1
+  },
+  {
+    "cardId": "1000",
+    "punchTime": "2021-05-10T19:00:00+05:30",
+    "zoneFrom": 1,
+    "zoneTo": 1
+  }
+]

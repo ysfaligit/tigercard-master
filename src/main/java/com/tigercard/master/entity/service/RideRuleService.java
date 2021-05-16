@@ -8,6 +8,8 @@ import com.tigercard.master.entity.repository.DayOfWeekRepository;
 import com.tigercard.master.entity.repository.RideRulesRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,7 +26,7 @@ public class RideRuleService {
     }
 
     public List<RideRule> getRideRules() {
-        return repository.findAll();
+        return repository.findTripsByActive(Boolean.TRUE, Sort.by("priority"));
     }
 
     public void delete(long id) {
@@ -34,7 +36,7 @@ public class RideRuleService {
     }
 
     public RideRule getRideRuleByTrip(Trip trip) {
-        List<RideRule> rules = repository.getRideRule(trip.getTime(), trip.getTime(),
+        List<RideRule> rules = repository.getRideRule(trip.getTime(), trip.getTime(), trip.getFromDate(), trip.getToDate(),
                 trip.getZoneFrom(), trip.getZoneTo(), trip.getDay().getDayId());
 
         RideRule finalRule = null;

@@ -5,6 +5,8 @@ import com.tigercard.master.entity.Zone;
 import com.tigercard.master.entity.repository.CappingRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,9 @@ public class CappingService {
     }
 
 
+    @Cacheable(
+            value = "fifteen-min-cache",
+            key = "'capping-' + #zoneFrom + '-' + #zoneTo")
     public Capping getCappingByZoneFromAndZoneTo(Long zoneFrom, Long zoneTo) {
         return cappingRepository.findByZoneFromAndZoneTo(new Zone(zoneFrom), new Zone(zoneTo));
     }
