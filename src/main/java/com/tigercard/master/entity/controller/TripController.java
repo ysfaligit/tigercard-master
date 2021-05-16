@@ -4,6 +4,7 @@ import com.tigercard.master.dto.TripRequestDto;
 import com.tigercard.master.dto.TripResponseDto;
 import com.tigercard.master.entity.TigerCard;
 import com.tigercard.master.entity.Trip;
+import com.tigercard.master.entity.service.ITripService;
 import com.tigercard.master.entity.service.TripService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,8 @@ import java.util.List;
 @Slf4j
 public class TripController {
     @Autowired
-    private TripService tripService;
+    private ITripService tripService;
+    
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
 
     @PostMapping("/save")
