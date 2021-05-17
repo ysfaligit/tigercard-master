@@ -2,7 +2,11 @@
 
 <h2>Project Guide & Reference : <a href="https://github.com/ysfaligit/tigercard-master/blob/main/TigerCard.pdf">
 TigerCard.pdf</a></h2>
-<legend>Tiger Card API records daily trip of user & calculates Daily & Weekly fares.</legend>
+<legend>Tiger Card API records daily trip of user & calculates Daily & Weekly fares.
+<br>
+Project deployed in HEROKU Cloud at : 
+</legend>
+
 
 <br>
 <h2>Tech Stack</h2>
