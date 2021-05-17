@@ -25,7 +25,7 @@ public class ZoneController {
         return zoneService.getAllZones();
     }
 
-    @PostMapping("/")
+    @PutMapping("/")
     public Zone save(@RequestBody Zone zone){
         return zoneService.save(zone);
     }

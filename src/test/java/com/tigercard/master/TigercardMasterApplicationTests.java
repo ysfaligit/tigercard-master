@@ -58,7 +58,7 @@ class TigercardMasterApplicationTests {
 
         MvcResult r = mockMvc.perform(
                 MockMvcRequestBuilders
-                        .post("/trip/saveAll")
+                        .put("/trip/saveAll")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(l))
 
@@ -87,7 +87,7 @@ class TigercardMasterApplicationTests {
 
         MvcResult r = mockMvc.perform(
                 MockMvcRequestBuilders
-                        .post("/trip/saveAll")
+                        .put("/trip/saveAll")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(l))
 

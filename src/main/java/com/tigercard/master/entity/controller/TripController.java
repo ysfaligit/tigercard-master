@@ -23,12 +23,12 @@ public class TripController {
 
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
 
-    @PostMapping("/save")
+    @PutMapping("/save")
     public ResponseEntity<Trip> save(@RequestBody TripRequestDto trip) {
          return ResponseEntity.ok(tripService.save(trip));
     }
 
-    @PostMapping("/saveAll")
+    @PutMapping("/saveAll")
     public ResponseEntity<String> saveAll(@RequestBody List<TripRequestDto> trips) {
         try {
             tripService.save(trips);
@@ -39,7 +39,7 @@ public class TripController {
         return ResponseEntity.ok("Trips saved successfully");
     }
 
-    @GetMapping("/report/{cardId}")
+    @GetMapping("/{cardId}")
     public ResponseEntity<TripResponseDto> getAllTripsByCard(@PathVariable("cardId") long cardId) {
          return ResponseEntity.ok(tripService.getTripsByCard(new TigerCard(cardId)));
     }
@@ -63,7 +63,7 @@ public class TripController {
         return ResponseEntity.badRequest().body(tripResponseDto);
     }
 
-    @GetMapping("/report")
+    @GetMapping("/")
     public ResponseEntity<TripResponseDto> getAllTrips() {
         return ResponseEntity.ok(tripService.getTrips());
     }
