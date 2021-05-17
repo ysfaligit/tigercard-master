@@ -1,22 +1,24 @@
 # Tigercard
 
-Tech Stack <br>
-    <li> Java, Spring Boot, 
-    <li>Spring JPA
-    <li>H2 In Memory Database
-    <li> Ehachache as Cache Manager
-    <li> SwaggerUI to generate REST Docs
+<h2>Project Guide & Reference : <a href="https://github.com/ysfaligit/tigercard-master/blob/main/TigerCard.pdf">
+TigerCard.pdf</a></h2>
 
+Tech Stack <br>
+<li>Java</li>
+<li>Spring Boot</li> 
+<li>Spring JPA</li>
+<li>H2 In Memory Database</li>
+<li> Ehachache as Cache Manager</li>
+<li> SwaggerUI to generate REST Docs</li>
 
 <br>
 
-<h1>Steps of Deployment</h1>
-<li> Install Java : https://www.java.com/en/download/help/download_options.html
-<li> Install Maven : https://maven.apache.org/install.html
-<li>Build Project by executing : mvn clean package</li>
-<li>Run : java -jar target/tigercard-master-0.0.1-SNAPSHOT.jar</li>
+<h2>Steps of Deployment</h2>
+<li><a href="https://www.java.com/en/download/help/download_options.html">Install Java</a>
+<li><a href="https://maven.apache.org/install.html">Install Maven</a>
+<li>Build & Run Project : <b>./mvnw clean package spring-boot:run</b></li>
 <li>Access Project at : <a href="http://localhost:8080">http://localhost:8080</a></li>
-<li>API DOCS : http://localhost:8080/swagger-ui.html</li>
+<li>API DOCS : <a href="http://localhost:8080/swagger-ui.html">http://localhost:8080/swagger-ui.html</a></li>
 
 <h4>Run Test Cases</h4>
 <li>Run : mvn test</li>
@@ -29,7 +31,7 @@ After bringing up the application, <br>DB can be accessed @ :
 <u>JDBC URL</u> : jdbc:h2:mem:tigercard
 <br>
 <u>Username</u> : sa
-<u>Password</u> : 
+<u>Password</u> :
 
 <br>
 

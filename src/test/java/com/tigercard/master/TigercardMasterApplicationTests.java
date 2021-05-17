@@ -67,7 +67,7 @@ class TigercardMasterApplicationTests {
         log.info("DailyCapTest : Trips saved successfully");
 
         MvcResult results = mockMvc.perform(
-                MockMvcRequestBuilders.get("/trip/report/{cardId}", String.valueOf(dailyCapCardId))
+                MockMvcRequestBuilders.get("/trip/{cardId}", String.valueOf(dailyCapCardId))
                         .contentType(MediaType.APPLICATION_JSON)
         ).andReturn();
 
@@ -97,7 +97,7 @@ class TigercardMasterApplicationTests {
         log.info("WeeklyCapTest : Trips saved successfully");
 
         MvcResult results = mockMvc.perform(
-                MockMvcRequestBuilders.get("/trip/report/{cardId}", String.valueOf(weeklyCapCardId))
+                MockMvcRequestBuilders.get("/trip/{cardId}", String.valueOf(weeklyCapCardId))
                         .contentType(MediaType.APPLICATION_JSON)
         ).andReturn();
         log.info("WeeklyCapTest : Retrieved Total Trips by " + dailyCapCardId);
