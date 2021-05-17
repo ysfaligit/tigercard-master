@@ -25,12 +25,12 @@ public class TigerCardController {
     }
 
     @GetMapping("/{id}")
-    public TigerCard getCardDetails(@PathVariable("id") double id) {
+    public TigerCard getCardDetails(@PathVariable("id") long id) {
         return tigerCardService.getCardDetails(id);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") double id) {
+    public void delete(@PathVariable("id") long id) {
         tigerCardService.delete(id);
     }
 }

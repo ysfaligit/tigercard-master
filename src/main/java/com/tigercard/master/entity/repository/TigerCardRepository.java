@@ -5,7 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface TigerCardRepository extends JpaRepository<TigerCard, Double> {
+public interface TigerCardRepository extends JpaRepository<TigerCard, Long> {
 
-    void deleteByCardId(double id);
+    void deleteByCardId(long cardId);
+
+    TigerCard getCardByCardId(long cardId);
 }

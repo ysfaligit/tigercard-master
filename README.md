@@ -4,8 +4,39 @@
 TigerCard.pdf</a></h2>
 <legend>Tiger Card API records daily trip of user & calculates Daily & Weekly fares.
 <br>
-Project deployed in HEROKU Cloud at : 
+Project with SAMPLE DATA is deployed in HEROKU Cloud at : <a href="https://tigercard-sahaj.herokuapp.com/">https://tigercard-sahaj.herokuapp.com</a>
 </legend>
+
+<br>
+<header>Zones</header>
+<li>All Zones : <a href="https://tigercard-sahaj.herokuapp.com/zone/">https://tigercard-sahaj.herokuapp.com/zone/</a> </li>
+<li><a href="https://tigercard-sahaj.herokuapp.com/zone/1">https://tigercard-sahaj.herokuapp.com/zone/1</a> </li>
+
+<br>
+<header>Rates</header>
+<li>All Rates : <a href="https://tigercard-sahaj.herokuapp.com/rate/">https://tigercard-sahaj.herokuapp.com/rate/</a> </li>
+
+<br>
+<header>Cappings</header>
+<li>All Cappings : <a href="https://tigercard-sahaj.herokuapp.com/capping/">https://tigercard-sahaj.herokuapp.com/capping/</a> </li>
+<li>Capping from Zone 1 - Zone 2 : 
+<a href="https://tigercard-sahaj.herokuapp.com/capping/1/2">https://tigercard-sahaj.herokuapp.com/capping/1/2 </a> 
+</li>
+</a> </li>
+<li>Capping from Zone 1 - Zone 1 : 
+<a href="https://tigercard-sahaj.herokuapp.com/capping/1/1">https://tigercard-sahaj.herokuapp.com/capping/1/1 </a> 
+</li>
+</a> </li>
+
+<br>
+<header>Tiger Card</header>
+<li>All Cards Registered : <a href="https://tigercard-sahaj.herokuapp.com/card/">https://tigercard-sahaj.herokuapp.com/card/</a> </li>
+<li>GET : <a href="https://tigercard-sahaj.herokuapp.com/card/1000">https://tigercard-sahaj.herokuapp.com/card/1000</a> </li>
+
+
+<br>
+<header>Ride Rules Defined </header>
+<li>All Ride Rules : <a href="https://tigercard-sahaj.herokuapp.com/riderules/">https://tigercard-sahaj.herokuapp.com/riderules/</a> </li>
 
 
 <br>
@@ -14,7 +45,7 @@ Project deployed in HEROKU Cloud at :
 <li>Spring Boot</li> 
 <li>Spring JPA</li>
 <li>H2 In Memory Database</li>
-<li> Ehachache as Cache Manager</li>
+<li> Ehachache as Cache Manager (15mins Cache)</li>
 <li> SwaggerUI to generate REST Docs</li>
 
 <br>

@@ -21,12 +21,14 @@ public class TigerCardService {
         return repository.findAll();
     }
 
-    @Cacheable(key = "'CardCache'+#cardId", value = "TigerCardCache")
-    public TigerCard getCardDetails(double cardId) {
-        return repository.getOne(cardId);
+    @Cacheable(
+            value = "fifteen-min-cache",
+            key = "'cardCache-' + #cardId")
+    public TigerCard getCardDetails(long cardId) {
+        return repository.getCardByCardId(cardId);
     }
 
-    public void delete(double id) {
+    public void delete(long id) {
         repository.deleteByCardId(id);
     }
 }
