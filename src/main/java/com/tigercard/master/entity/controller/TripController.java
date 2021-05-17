@@ -20,7 +20,7 @@ import java.util.List;
 public class TripController {
     @Autowired
     private ITripService tripService;
-    
+
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
 
     @PostMapping("/save")

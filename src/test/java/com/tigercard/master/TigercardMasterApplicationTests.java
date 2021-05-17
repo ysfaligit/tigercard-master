@@ -80,7 +80,7 @@ class TigercardMasterApplicationTests {
     }
 
     @Test
-    void testD_getWeeklyCapReachedByCard() throws Exception {
+    void testWeeklyCapReachedByCard() throws Exception {
 
         List l = objectMapper.readValue(new File("testData" + File.separator + "weeklyTrips.json"), List.class);
         log.info("WeeklyCapTest : loaded trips from json");
