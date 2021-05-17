@@ -15,7 +15,6 @@ import java.io.Serializable;
 public class Capping implements Serializable {
     @Id
     @Column(name = "capping_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long cappingId;
 
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})

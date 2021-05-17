@@ -1,0 +1,13 @@
+{
+  "id": {
+    "rateId": 5,
+    "zoneFrom": {
+      "zoneId": 1
+    },
+    "zoneTo": {
+      "zoneId": 3
+    }
+  },
+  "peakRate": 100,
+  "offPeakRate": 85
+}

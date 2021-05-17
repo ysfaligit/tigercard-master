@@ -48,7 +48,11 @@ public class RideRule {
 
     private double priority;
     private boolean active;
+
+    @Temporal(TemporalType.DATE)
     private Date fromDate;
+
+    @Temporal(TemporalType.DATE)
     private Date toDate;
 
     @Transient

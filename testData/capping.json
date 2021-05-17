@@ -1,0 +1,11 @@
+{
+  "cappingId": 5,
+  "zoneFrom" : {
+    "zoneId": 1
+  },
+  "zoneTo" : {
+    "zoneId": 3
+  },
+  "dailyCap": 95,
+  "weeklyCap": 550
+}

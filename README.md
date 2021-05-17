@@ -2,8 +2,10 @@
 
 <h2>Project Guide & Reference : <a href="https://github.com/ysfaligit/tigercard-master/blob/main/TigerCard.pdf">
 TigerCard.pdf</a></h2>
+<legend>Tiger Card API records daily trip of user & calculates Daily & Weekly fares.</legend>
 
-Tech Stack <br>
+<br>
+<h2>Tech Stack</h2>
 <li>Java</li>
 <li>Spring Boot</li> 
 <li>Spring JPA</li>
@@ -17,6 +19,8 @@ Tech Stack <br>
 <li><a href="https://www.java.com/en/download/help/download_options.html">Install Java</a>
 <li><a href="https://maven.apache.org/install.html">Install Maven</a>
 <li>Build & Run Project : <b>./mvnw clean package spring-boot:run</b></li>
+<li>Once the project is up, pre-requisite data will be loaded in DB from 
+<a href="https://github.com/ysfaligit/tigercard-master/blob/main/src/main/resources/data.sql">data.sql</a></li>
 <li>Access Project at : <a href="http://localhost:8080">http://localhost:8080</a></li>
 <li>API DOCS : <a href="http://localhost:8080/swagger-ui.html">http://localhost:8080/swagger-ui.html</a></li>
 
@@ -24,7 +28,7 @@ Tech Stack <br>
 <li>Run : mvn test</li>
 
 
-<h1>DB Details</h1>
+<h2>DB Details</h2>
 After bringing up the application, <br>DB can be accessed @ : 
 <a href="http://localhost:8080/h2-ui/login.jsp">http://localhost:8080/h2-ui/login.jsp</a>
 
@@ -35,14 +39,18 @@ After bringing up the application, <br>DB can be accessed @ :
 
 <br>
 
-<h1>Test Cases</h1>
+<h1>Integration Test Cases</h1>
 <h3>testDailyCapReachedByCard:</h3>
-    <p>This test case covers example illustrated at <b>TigerCard.pdf : page - 4, Example 1. Daily cap reached</b>.
+    <p>This test case covers example illustrated at 
+<b><a href="https://github.com/ysfaligit/tigercard-master/blob/main/TigerCard.pdf">
+TigerCard.pdf : page - 4, Example 1. Daily cap reached</a></b>.
 
 <br>
 Steps of execution :
-<li> Builds schema</li>
-<li>Load data mentioned in example</li>
+<li> Builds schema from <a href="https://github.com/ysfaligit/tigercard-master/blob/main/src/main/resources/data.sql">data.sql</a></li>
+<li>Load data mentioned in example from file : 
+<a href="https://github.com/ysfaligit/tigercard-master/blob/main/testData/dailyTrips.json">dailyTrips</a>
+</li>
 <li>Fetches the data using get method</li>
 <li>Validates the output</li>
 
@@ -55,7 +63,75 @@ TigerCard.pdf : page - 4, Example 2. Weekly cap reached
 </a></b>.
 <br>
 Steps of execution :
-<li> Builds schema</li>
-<li>Load data mentioned in example</li>
+<li> Builds schema from <a href="https://github.com/ysfaligit/tigercard-master/blob/main/src/main/resources/data.sql">data.sql</a></li>
+<li>Load data mentioned in example from file : 
+<a href="https://github.com/ysfaligit/tigercard-master/blob/main/testData/weeklyTrips.json">weeklyTrips</a>
+</li>
 <li>Fetches the data using get method</li>
 <li>Validates the output</li>
+
+
+<br>
+
+<h3>testZoneMethods</h3>
+Steps of execution :
+<li> Builds schema from <a href="https://github.com/ysfaligit/tigercard-master/blob/main/src/main/resources/data.sql">data.sql</a></li>
+<li>Load data mentioned in example from file : 
+<a href="https://github.com/ysfaligit/tigercard-master/blob/main/testData/zone.json">zone.json</a>
+</li>
+<li>Save Zones using  <u>PUT/zone</u> method </li>
+<li>Fetches the data using <u>GET/zone</u> method</li>
+<li>Validates the output</li>
+
+
+<br>
+
+<h3>testCappingMethods</h3>
+Steps of execution :
+<li> Builds schema from <a href="https://github.com/ysfaligit/tigercard-master/blob/main/src/main/resources/data.sql">data.sql</a></li>
+<li>Load data mentioned in example from file : 
+<a href="https://github.com/ysfaligit/tigercard-master/blob/main/testData/zone.json">zone.json</a>
+</li>
+<li>Save Zones using <u>PUT/zone</u> method </li>
+<li>Fetches the data using <u>GET/zone</u> method</li>
+<li>Validates the output</li>
+<li>Use newly added ZONE above, in capping sample data.</li>
+<li>Load data mentioned in example from file : 
+<a href="https://github.com/ysfaligit/tigercard-master/blob/main/testData/capping.json">capping.json</a>
+</li>
+<li>Save Capping using <u>PUT/capping</u> </li>
+<li>Fetches the data using <u>GET/capping</u></li>
+<li>Validates the output</li>
+
+
+<br>
+
+<h3>testRateMethods</h3>
+Steps of execution :
+<li> Builds schema from <a href="https://github.com/ysfaligit/tigercard-master/blob/main/src/main/resources/data.sql">data.sql</a></li>
+<li>Load data mentioned in example from file : 
+<a href="https://github.com/ysfaligit/tigercard-master/blob/main/testData/zone.json">zone.json</a>
+</li>
+<li>Save Zones using <u>PUT/zone</u> method </li>
+<li>Fetches the data using <u>GET/zone</u> method</li>
+<li>Validates the output</li>
+<li>Use newly added ZONE above, in capping sample data.</li>
+<li>Load data mentioned in example from file : 
+<a href="https://github.com/ysfaligit/tigercard-master/blob/main/testData/rate.json">rate.json</a>
+</li>
+<li>Save Capping using <u>PUT/rate</u> method </li>
+<li>Fetches the data using <u>GET/rate</u> method</li>
+<li>Validates the output</li>
+
+<br>
+
+<h3>testRideRuleMethods</h3>
+Steps of execution :
+<li> Builds schema from <a href="https://github.com/ysfaligit/tigercard-master/blob/main/src/main/resources/data.sql">data.sql</a></li>
+<li>Load data mentioned in example from file : 
+<a href="https://github.com/ysfaligit/tigercard-master/blob/main/testData/rideRule.json">rideRule.json</a>
+</li>
+<li>Save Capping using <u>PUT/riderules</u> method </li>
+<li>Fetches the data using <u>GET/riderules</u> method</li>
+<li>Validates the output</li>
+

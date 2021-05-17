@@ -25,7 +25,7 @@ public class CappingController {
         return cappingService.getCappings();
     }
 
-    @PostMapping("/")
+    @PutMapping("/")
     public Capping save(@RequestBody Capping capping) {
         return cappingService.save(capping);
     }

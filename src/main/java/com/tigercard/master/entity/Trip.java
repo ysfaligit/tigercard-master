@@ -56,7 +56,11 @@ public class Trip {
     private boolean flagPeak;
     private Integer fare;
     private String explanation;
+
+    @Temporal(TemporalType.DATE)
     private Date fromDate;
+
+    @Temporal(TemporalType.DATE)
     private Date toDate;
 
     @Temporal(TemporalType.DATE)
