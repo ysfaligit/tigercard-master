@@ -15,7 +15,7 @@ Tech Stack <br>
 <li> Install Maven : https://maven.apache.org/install.html
 <li>Build Project by executing : mvn clean package</li>
 <li>Run : java -jar target/tigercard-master-0.0.1-SNAPSHOT.jar</li>
-<li>Access Project at : http://localhost:8080</li>
+<li>Access Project at : <a href="http://localhost:8080">http://localhost:8080</a></li>
 <li>API DOCS : http://localhost:8080/swagger-ui.html</li>
 
 <h4>Run Test Cases</h4>
@@ -24,7 +24,7 @@ Tech Stack <br>
 
 <h1>DB Details</h1>
 After bringing up the application, <br>DB can be accessed @ : 
-http://localhost:8080/h2-ui/login.jsp
+<a href="http://localhost:8080/h2-ui/login.jsp">http://localhost:8080/h2-ui/login.jsp</a>
 
 <u>JDBC URL</u> : jdbc:h2:mem:tigercard
 <br>
@@ -47,7 +47,10 @@ Steps of execution :
 <br>
 
 <h3>testWeeklyCapReachedByCard</h3>
-<p>This test case covers example illustrated at <b>TigerCard.pdf : page - 4, Example 1. Daily cap reached</b>.
+<p>This test case covers example illustrated at 
+<b><a href="https://github.com/ysfaligit/tigercard-master/blob/main/TigerCard.pdf">
+TigerCard.pdf : page - 4, Example 2. Weekly cap reached
+</a></b>.
 <br>
 Steps of execution :
 <li> Builds schema</li>
