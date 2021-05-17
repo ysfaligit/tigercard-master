@@ -4,10 +4,11 @@
 TigerCard.pdf</a></h2>
 <legend>Tiger Card API records daily trip of user & calculates Daily & Weekly fares.
 <br>
+<br>
 Project with SAMPLE DATA is deployed in HEROKU Cloud at : <a href="https://tigercard-sahaj.herokuapp.com/">https://tigercard-sahaj.herokuapp.com</a>
 </legend>
 
-<br>
+<br><br>
 <header>Zones</header>
 <li>All Zones : <a href="https://tigercard-sahaj.herokuapp.com/zone/">https://tigercard-sahaj.herokuapp.com/zone/</a> </li>
 <li><a href="https://tigercard-sahaj.herokuapp.com/zone/1">https://tigercard-sahaj.herokuapp.com/zone/1</a> </li>
