@@ -3,7 +3,7 @@
 <h2>Project Guide & Reference : <a href="https://github.com/ysfaligit/tigercard-master/blob/main/TigerCard.pdf">
 TigerCard.pdf</a></h2>
 <legend>Tiger Card API records daily trip of user & calculates Daily & Weekly fares.
-<br>
+<br><br>
 
 Project with SAMPLE DATA is deployed in HEROKU Cloud at : <a href="https://tigercard-sahaj.herokuapp.com/">https://tigercard-sahaj.herokuapp.com </a>
 <br>
@@ -52,6 +52,8 @@ API Docs : https://tigercard-sahaj.herokuapp.com/swagger-ui.html
 <br>
 <header>Database</header>
 <u>url</u> : <a href="https://tigercard-sahaj.herokuapp.com/h2-ui/login.jsp">https://tigercard-sahaj.herokuapp.com/h2-ui/login.jsp</a>
+<br>
+JDBC URL : jdbc:h2:mem:tigercard
 <br>
 <u>Username</u> : sa
 <br>
