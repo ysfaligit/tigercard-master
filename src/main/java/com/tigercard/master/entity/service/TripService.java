@@ -45,7 +45,7 @@ public class TripService implements ITripService {
         TripResponseDto tripResponseDto = new TripResponseDto();
 
         tripResponseDto.setTrips(tripRepository.getTripsByCard(card, Sort.by(sortColumns)));
-        tripResponseDto.setTotalTrip(tripResponseDto.getTrips().stream().mapToInt(value -> value.getFare()).sum());
+        tripResponseDto.setTripsTotal(tripResponseDto.getTrips().stream().mapToInt(value -> value.getFare()).sum());
         return tripResponseDto;
     }
 
@@ -58,7 +58,7 @@ public class TripService implements ITripService {
     public TripResponseDto getTrips() {
         TripResponseDto tripResponseDto = new TripResponseDto();
         tripResponseDto.setTrips(tripRepository.findAll());
-        tripResponseDto.setTotalTrip(tripResponseDto.getTrips().stream().mapToInt(value -> value.getFare()).sum());
+        tripResponseDto.setTripsTotal(tripResponseDto.getTrips().stream().mapToInt(value -> value.getFare()).sum());
         return tripResponseDto;
     }
 
@@ -70,7 +70,7 @@ public class TripService implements ITripService {
         tripResponseDto.setTrips(tripRepository.getTripsByCardAndPunchTimeBetween
                 (new TigerCard(tripRequestDto.getCardId()), tripRequestDto.getFromDate(), tripRequestDto.getToDate(),
                         Sort.by(sortColumns)));
-        tripResponseDto.setTotalTrip(tripResponseDto.getTrips().stream().mapToInt(value -> value.getFare()).sum());
+        tripResponseDto.setTripsTotal(tripResponseDto.getTrips().stream().mapToInt(value -> value.getFare()).sum());
         return tripResponseDto;
     }
 

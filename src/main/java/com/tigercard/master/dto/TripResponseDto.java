@@ -12,6 +12,6 @@ import java.util.List;
 @NoArgsConstructor
 public class TripResponseDto {
     private List<Trip> trips;
-    private int totalTrip;
+    private int tripsTotal;
     private String errorMessage;
 }

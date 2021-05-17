@@ -80,8 +80,8 @@ class TigercardIntegrationTests {
 
         TripResponseDto tripResponse = objectMapper.readValue(results.getResponse().getContentAsString(), TripResponseDto.class);
 
-        assertEquals(dailyCapExpectedTripTotal, tripResponse.getTotalTrip());
-        log.info("DailyCapTest : trips total : " + tripResponse.getTotalTrip());
+        assertEquals(dailyCapExpectedTripTotal, tripResponse.getTripsTotal());
+        log.info("DailyCapTest : trips total : " + tripResponse.getTripsTotal());
     }
 
     @Test
@@ -109,8 +109,8 @@ class TigercardIntegrationTests {
 
         TripResponseDto tripResponse = objectMapper.readValue(results.getResponse().getContentAsString(), TripResponseDto.class);
 
-        assertEquals(weeklyCapExpectedTripTotal, tripResponse.getTotalTrip());
-        log.info("WeeklyCapTest : trips total : " + tripResponse.getTotalTrip());
+        assertEquals(weeklyCapExpectedTripTotal, tripResponse.getTripsTotal());
+        log.info("WeeklyCapTest : trips total : " + tripResponse.getTripsTotal());
     }
 
     @Test

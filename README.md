@@ -5,7 +5,9 @@ TigerCard.pdf</a></h2>
 <legend>Tiger Card API records daily trip of user & calculates Daily & Weekly fares.
 <br>
 
-Project with SAMPLE DATA is deployed in HEROKU Cloud at : <a href="https://tigercard-sahaj.herokuapp.com/">https://tigercard-sahaj.herokuapp.com</a>
+Project with SAMPLE DATA is deployed in HEROKU Cloud at : <a href="https://tigercard-sahaj.herokuapp.com/">https://tigercard-sahaj.herokuapp.com </a>
+<br>
+API Docs : https://tigercard-sahaj.herokuapp.com/swagger-ui.html
 </legend>
 
 <br>
@@ -39,6 +41,21 @@ Project with SAMPLE DATA is deployed in HEROKU Cloud at : <a href="https://tiger
 <header>Ride Rules Defined </header>
 <li>All Ride Rules : <a href="https://tigercard-sahaj.herokuapp.com/riderules/">https://tigercard-sahaj.herokuapp.com/riderules/</a> </li>
 
+<br>
+<header>Trips</header>
+<li>Register Single Trip  : <a href="https://tigercard-sahaj.herokuapp.com/trip/save">https://tigercard-sahaj.herokuapp.com/trip/save</a> </li>
+<li>Register Multiple Trips  : <a href="https://tigercard-sahaj.herokuapp.com/trip/saveAll">https://tigercard-sahaj.herokuapp.com/trip/saveAll</a> </li>
+- Refer <a href="https://github.com/ysfaligit/tigercard-master/blob/main/testData/dailyTrips.json">dailyTrips.json</a> for input format.
+<li>Get All Trips for Card  : <a href="https://tigercard-sahaj.herokuapp.com/trip/1000">https://tigercard-sahaj.herokuapp.com/trip/1000</a> </li>
+<li>Get Trips Total for Card  : <a href="https://tigercard-sahaj.herokuapp.com/trip/1000/tripsTotal">https://tigercard-sahaj.herokuapp.com/trip/1000/tripsTotal</a> </li>
+
+<br>
+<header>Database</header>
+<u>url</u> : <a href="https://tigercard-sahaj.herokuapp.com/h2-ui/login.jsp">https://tigercard-sahaj.herokuapp.com/h2-ui/login.jsp</a>
+<br>
+<u>Username</u> : sa
+<br>
+<u>Password</u> :
 
 <br>
 <h2>Tech Stack</h2>

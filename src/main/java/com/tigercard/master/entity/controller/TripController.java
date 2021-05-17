@@ -41,7 +41,12 @@ public class TripController {
 
     @GetMapping("/{cardId}")
     public ResponseEntity<TripResponseDto> getAllTripsByCard(@PathVariable("cardId") long cardId) {
-         return ResponseEntity.ok(tripService.getTripsByCard(new TigerCard(cardId)));
+        return ResponseEntity.ok(tripService.getTripsByCard(new TigerCard(cardId)));
+    }
+
+    @GetMapping("/{cardId}/tripsTotal")
+    public ResponseEntity<Integer> getTripsTotal(@PathVariable("cardId") long cardId) {
+        return ResponseEntity.ok(tripService.getTripsByCard(new TigerCard(cardId)).getTripsTotal());
     }
 
 
