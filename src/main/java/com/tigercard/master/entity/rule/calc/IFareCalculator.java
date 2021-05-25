@@ -1,4 +1,4 @@
-package com.tigercard.master.entity.rule.eval;
+package com.tigercard.master.entity.rule.calc;
 
 import com.tigercard.master.dto.TripContextDto;
 import org.springframework.stereotype.Service;

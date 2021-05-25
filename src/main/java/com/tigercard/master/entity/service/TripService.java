@@ -7,7 +7,7 @@ import com.tigercard.master.entity.*;
 import com.tigercard.master.entity.repository.TripRepository;
 import com.tigercard.master.entity.repository.WeeklyTripRepository;
 import com.tigercard.master.entity.rule.action.RuleActionEval;
-import com.tigercard.master.entity.rule.eval.IFareCalculator;
+import com.tigercard.master.entity.rule.calc.IFareCalculator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -102,7 +102,9 @@ public class TripService implements ITripService {
 
             saveUpdateWeeklyTrip();
             log.info("Weekly Trip Saved Successfully");
-        } catch (Error e) {e.printStackTrace();}
+        } catch (Error e) {
+            log.error(e.getMessage(),e);
+        }
         return tripContext.getNewTrip();
     }
 
@@ -126,25 +128,6 @@ public class TripService implements ITripService {
         trip.setDay(new DayOfWeek(l.getDayOfWeek().getValue()));
     }
 
-    private boolean isPeak(Trip newTrip) {
-//        return rideRuleService.getRideRuleByTrip(newTrip).getPeak();
-        return true;
-    }
-
-    private void populateBaseFareByRideRuleConditionApplied(Trip trip) {
-        // CREATE ZONE KEY
-        String key = trip.getZoneFrom().getZoneId() + "-" + trip.getZoneTo().getZoneId();
-        Rate rate = rateService.getRateByZones(trip.getZoneFrom().getZoneId(), trip.getZoneTo().getZoneId());
-        if (isPeak(trip)) {
-            trip.setFlagPeak(Boolean.TRUE);
-            trip.setOriginalFare(rate.getPeakRate());
-            trip.setExplanation("Peak hours Single fare");
-        } else {
-            trip.setFlagPeak(Boolean.FALSE);
-            trip.setOriginalFare(rate.getOffPeakRate());
-            trip.setExplanation("Off-peak single fare");
-        }
-    }
 
     void fireRules() {
         ruleActionEval.fireRules(tripContext);
@@ -223,8 +206,8 @@ public class TripService implements ITripService {
 
         populateCardInfo(newTrip.getCard());
         populateDateAttributes(newTrip);
-        populateBaseFareByRideRuleConditionApplied(newTrip);
-//        fireRules();
+//        populateBaseFareByRideRuleConditionApplied(newTrip);
+        fireRules();
         populateDailyCappingData();
         log.info("DailyTrips Data Loaded..");
 
