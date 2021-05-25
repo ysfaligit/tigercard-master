@@ -1,6 +1,5 @@
 package com.tigercard.master.entity.controller;
 
-import com.tigercard.master.entity.RideRule;
 import com.tigercard.master.entity.TigerCard;
 import com.tigercard.master.entity.service.TigerCardService;
 import org.springframework.beans.factory.annotation.Autowired;

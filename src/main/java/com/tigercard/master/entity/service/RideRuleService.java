@@ -1,14 +1,11 @@
 package com.tigercard.master.entity.service;
 
-import com.tigercard.master.entity.Capping;
-import com.tigercard.master.entity.Rate;
-import com.tigercard.master.entity.RideRule;
+import com.tigercard.master.entity.RuleAction;
+import com.tigercard.master.entity.RuleCondition;
 import com.tigercard.master.entity.Trip;
-import com.tigercard.master.entity.repository.DayOfWeekRepository;
-import com.tigercard.master.entity.repository.RideRulesRepository;
+import com.tigercard.master.entity.repository.RuleConditionRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -18,28 +15,32 @@ import java.util.List;
 @Slf4j
 public class RideRuleService {
     @Autowired
-    private RideRulesRepository repository;
+    private RuleConditionRepository repository;
 
 
-    public RideRule saveRule(RideRule rideRule) {
-        return repository.save(rideRule);
+    public RuleCondition saveRule(RuleCondition ruleCondition) {
+        return repository.save(ruleCondition);
     }
 
-    public List<RideRule> getRideRules() {
+    public List<RuleCondition> getRideRules() {
         return repository.findTripsByActive(Boolean.TRUE, Sort.by("priority"));
     }
 
     public void delete(long id) {
-        RideRule rule = new RideRule(id);
+        RuleCondition rule = new RuleCondition(id);
 
         repository.delete(rule);
     }
 
-    public RideRule getRideRuleByTrip(Trip trip) {
-        List<RideRule> rules = repository.getRideRule(trip.getTime(), trip.getTime(), trip.getFromDate(), trip.getToDate(),
-                trip.getZoneFrom(), trip.getZoneTo(), trip.getDay().getDayId());
+    public RuleCondition getRideRuleByTrip(Trip trip) {
+        List<RuleCondition> rules = repository
+                .getRideRule(trip.getTime(), trip.getTime(),
+                        trip.getFromDate(), trip.getToDate(),
+                        trip.getZoneFrom(), trip.getZoneTo(),
+                        trip.getCard().getAge(),
+                        trip.getDay().getDayId());
 
-        RideRule finalRule = null;
+        RuleCondition finalRule = null;
         if (rules != null && rules.size() > 1) {
             finalRule = rules.stream()
                     .filter(rideRule ->
@@ -50,9 +51,8 @@ public class RideRuleService {
         } else if (rules != null && rules.size() == 1)
             finalRule = rules.get(0);
 
-        // DEFAULT
-        if (finalRule == null)
-            finalRule = new RideRule(false);
+        else
+            finalRule = new RuleCondition(new RuleAction(false));
 
         log.info("Rule Applied " + finalRule.getRuleId());
         return finalRule;

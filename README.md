@@ -184,7 +184,7 @@ Steps of execution :
 Steps of execution :
 <li> Builds schema from <a href="https://github.com/ysfaligit/tigercard-master/blob/main/src/main/resources/data.sql">data.sql</a></li>
 <li>Load data mentioned in example from file : 
-<a href="https://github.com/ysfaligit/tigercard-master/blob/main/testData/rideRule.json">rideRule.json</a>
+<a href="https://github.com/ysfaligit/tigercard-master/blob/main/testData/ruleCondition.json">ruleCondition.json</a>
 </li>
 <li>Save Capping using <u>PUT/riderules</u> method </li>
 <li>Fetches the data using <u>GET/riderules</u> method</li>

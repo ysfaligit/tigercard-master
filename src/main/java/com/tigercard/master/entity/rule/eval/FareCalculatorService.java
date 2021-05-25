@@ -1,5 +1,6 @@
-package com.tigercard.master.entity.service;
+package com.tigercard.master.entity.rule.eval;
 
+import com.tigercard.master.dto.TripContextDto;
 import com.tigercard.master.entity.Trip;
 import com.tigercard.master.entity.WeeklyTrip;
 import org.springframework.stereotype.Service;
@@ -7,9 +8,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class FareCalculatorService implements IFareCalculator {
+public class FareCalculatorService extends AbstractRuleCalculator implements IFareCalculator<TripContextDto> {
     @Override
-    public void calculate(TripContext tripContext) {
+    public void calculate(TripContextDto tripContext) {
         List<Trip> totalDailyTrips = tripContext.getTotalDailyTrips();
         int summationOfDailyFareTrips = 0;
         int dailyCapping = tripContext.getDailyCapping();

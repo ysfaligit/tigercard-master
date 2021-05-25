@@ -1,7 +1,6 @@
 package com.tigercard.master.entity.controller;
 
-import com.tigercard.master.entity.DayOfWeek;
-import com.tigercard.master.entity.RideRule;
+import com.tigercard.master.entity.RuleCondition;
 import com.tigercard.master.entity.service.RideRuleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,12 +14,12 @@ public class RideRulesController {
     private RideRuleService rideRuleService;
 
     @PutMapping("/")
-    public RideRule save(@RequestBody RideRule rideRule){
-        return rideRuleService.saveRule(rideRule);
+    public RuleCondition save(@RequestBody RuleCondition ruleCondition){
+        return rideRuleService.saveRule(ruleCondition);
     }
 
     @GetMapping("/")
-    public List<RideRule> getAllRideRules() {
+    public List<RuleCondition> getAllRideRules() {
         return rideRuleService.getRideRules();
     }
 

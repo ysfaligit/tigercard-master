@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tigercard.master.dto.TripResponseDto;
 import com.tigercard.master.entity.Capping;
 import com.tigercard.master.entity.Rate;
-import com.tigercard.master.entity.RideRule;
+import com.tigercard.master.entity.RuleCondition;
 import com.tigercard.master.entity.Zone;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -205,26 +205,26 @@ class TigercardIntegrationTests {
 
     @Test
     void testRideRuleMethods() throws Exception {
-        RideRule rideRule = objectMapper.readValue(new File("testData" + File.separator + "rideRule.json"), RideRule.class);
+        RuleCondition ruleCondition = objectMapper.readValue(new File("testData" + File.separator + "ruleCondition.json"), RuleCondition.class);
 
         MvcResult savedRideRuleResult = mockMvc.perform(
                 MockMvcRequestBuilders
                         .put("/riderules/")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(rideRule))
+                        .content(objectMapper.writeValueAsString(ruleCondition))
 
         ).andReturn();
 
         assertNotNull(savedRideRuleResult.getResponse().getContentAsString());
-        RideRule savedRideRule = objectMapper.readValue(savedRideRuleResult.getResponse().getContentAsString(), RideRule.class);
+        RuleCondition savedRuleCondition = objectMapper.readValue(savedRideRuleResult.getResponse().getContentAsString(), RuleCondition.class);
 
-        assertNotNull(savedRideRule);
-        assertNotNull(savedRideRule.getRuleId());
-        assertEquals(rideRule.getFromTime(), savedRideRule.getFromTime());
-        assertEquals(rideRule.getToTime(), savedRideRule.getToTime());
-        assertEquals(rideRule.getZoneFrom(), savedRideRule.getZoneFrom());
-        assertEquals(rideRule.getZoneTo(), savedRideRule.getZoneTo());
-        log.info("PASSED :  rideRule put mapping");
+        assertNotNull(savedRuleCondition);
+        assertNotNull(savedRuleCondition.getRuleId());
+        assertEquals(ruleCondition.getFromTime(), savedRuleCondition.getFromTime());
+        assertEquals(ruleCondition.getToTime(), savedRuleCondition.getToTime());
+        assertEquals(ruleCondition.getZoneFrom(), savedRuleCondition.getZoneFrom());
+        assertEquals(ruleCondition.getZoneTo(), savedRuleCondition.getZoneTo());
+        log.info("PASSED :  ruleCondition put mapping");
 
         log.info("Testing GET capping/ call");
 

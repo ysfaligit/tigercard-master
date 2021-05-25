@@ -1,12 +1,13 @@
 package com.tigercard.master.entity.service;
 
+import com.tigercard.master.dto.TripContextDto;
 import com.tigercard.master.dto.TripRequestDto;
 import com.tigercard.master.dto.TripResponseDto;
 import com.tigercard.master.entity.*;
 import com.tigercard.master.entity.repository.TripRepository;
 import com.tigercard.master.entity.repository.WeeklyTripRepository;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.tigercard.master.entity.rule.action.RuleActionEval;
+import com.tigercard.master.entity.rule.eval.IFareCalculator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,7 +27,9 @@ public class TripService implements ITripService {
 
     @Autowired
     IFareCalculator fareCalculator;
-    private TripContext tripContext = new TripContext();
+    @Autowired
+    TigerCardService tigerCardService;
+    private TripContextDto tripContext = new TripContextDto();
     @Autowired
     private TripRepository tripRepository;
     @Autowired
@@ -39,6 +42,8 @@ public class TripService implements ITripService {
     private WeeklyTripRepository weeklyTripRepository;
     @Value("${trip.sort.columns}")
     private String[] sortColumns;
+    @Autowired
+    private RuleActionEval ruleActionEval;
 
     @Override
     public TripResponseDto getTripsByCard(TigerCard card) {
@@ -81,26 +86,25 @@ public class TripService implements ITripService {
         });
     }
 
-
     /////////////////
 //    PRIVATE METHODS  //
     /////////////////
     private Trip processTrip(Trip newTrip) {
-        populatePreRequisiteData(newTrip);
+        try {
+            populatePreRequisiteData(newTrip);
 
-        log.info("Calculating Trip Fare..");
-        fareCalculator.calculate(tripContext);
-        log.info("Calculation done");
+            log.info("Calculating Trip Fare..");
+            fareCalculator.calculate(tripContext);
+            log.info("Calculation done");
 
-        saveUpdateNewTrip();
-        log.info("Newly Trip Saved Successfully");
+            saveUpdateNewTrip();
+            log.info("Newly Trip Saved Successfully");
 
-        saveUpdateWeeklyTrip();
-        log.info("Weekly Trip Saved Successfully");
-
+            saveUpdateWeeklyTrip();
+            log.info("Weekly Trip Saved Successfully");
+        } catch (Error e) {e.printStackTrace();}
         return tripContext.getNewTrip();
     }
-
 
     private Trip prepareData(TripRequestDto newTrip) {
         Trip t = new Trip();
@@ -123,7 +127,8 @@ public class TripService implements ITripService {
     }
 
     private boolean isPeak(Trip newTrip) {
-        return rideRuleService.getRideRuleByTrip(newTrip).getPeak();
+//        return rideRuleService.getRideRuleByTrip(newTrip).getPeak();
+        return true;
     }
 
     private void populateBaseFareByRideRuleConditionApplied(Trip trip) {
@@ -141,7 +146,11 @@ public class TripService implements ITripService {
         }
     }
 
-    private void populateDailyCappingData(TripContext tripContext) {
+    void fireRules() {
+        ruleActionEval.fireRules(tripContext);
+    }
+
+    private void populateDailyCappingData() {
         // LOAD ALL DAILY TRIPS + ADD NEW TRIP
         tripContext.setTotalDailyTrips(tripRepository.getTripsByCardAndDayAndWeekOfYear(tripContext.getNewTrip().getCard(),
                 tripContext.getNewTrip().getDay(), tripContext.getNewTrip().getWeekOfYear()));
@@ -166,7 +175,7 @@ public class TripService implements ITripService {
 
     }
 
-    private void populateWeeklyCappingData(TripContext tripContext) {
+    private void populateWeeklyCappingData() {
         // WEEKLY TRIP PROCESSING
         Trip newTrip = tripContext.getNewTrip();
         Trip dailyCappingMaxFaredTrip = tripContext.getDailyCappingMaxFaredTrip();
@@ -211,14 +220,25 @@ public class TripService implements ITripService {
 
     private void populatePreRequisiteData(Trip newTrip) {
         tripContext.setNewTrip(newTrip);
+
+        populateCardInfo(newTrip.getCard());
         populateDateAttributes(newTrip);
         populateBaseFareByRideRuleConditionApplied(newTrip);
-        populateDailyCappingData(tripContext);
+//        fireRules();
+        populateDailyCappingData();
         log.info("DailyTrips Data Loaded..");
 
-        populateWeeklyCappingData(tripContext);
+        populateWeeklyCappingData();
         log.info("Weekly Data Loaded..");
     }
+
+    private void populateCardInfo(TigerCard card) {
+        TigerCard tempCard = tigerCardService.getCardDetails(card.getCardId());
+        card.setAge(tempCard.getAge());
+        card.setCardId(tempCard.getCardId());
+        card.setCustomer(tempCard.getCustomer());
+    }
+
 
     private void saveUpdateWeeklyTrip() {
         WeeklyTrip weeklyTripOfCurrentDay = tripContext.getWeeklyTripOfCurrentDay();
@@ -244,19 +264,3 @@ public class TripService implements ITripService {
 }
 
 
-@NoArgsConstructor
-@Data
-class TripContext {
-    private Trip newTrip;
-
-    // DAILY TRIP DATA
-    private List<Trip> totalDailyTrips;
-    private int dailyCapping;
-    private Trip dailyCappingMaxFaredTrip;
-
-    // WEEKLY CAP DATA
-    private WeeklyTrip weeklyTripOfCurrentDay;
-    private int summationWeeklyFareExclCurrentDayTrips;
-    private int weeklyCapping;
-
-}
